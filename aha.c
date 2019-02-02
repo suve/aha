@@ -190,7 +190,7 @@ int divide (int dividend, int divisor){
 	return result.quot;
 }
 
-void make_rgb (int color_id, char str_rgb[12]){
+void print_color(const char* property_name, const int color_id){
 
 	if (color_id < 16 || color_id > 255)
 		return;
@@ -198,7 +198,7 @@ void make_rgb (int color_id, char str_rgb[12]){
 	{
 		int index = color_id - 232;
 		int grey = index * 256 / 24;
-		sprintf(str_rgb, "%d,%d,%d", grey, grey, grey);
+		printf("%s:rgb(%d,%d,%d);", property_name, grey, grey, grey);
 		return;
 	}
 	int index_R = divide((color_id - 16), 36);
@@ -224,7 +224,7 @@ void make_rgb (int color_id, char str_rgb[12]){
 	} else {
 		rgb_B = 0;
 	}
-	sprintf(str_rgb, "%d,%d,%d", rgb_R, rgb_G, rgb_B);
+	printf("%s:rgb(%d,%d,%d)", property_name, rgb_R, rgb_G, rgb_B);
 }
 
 #define VERSION_PRINTF_MAKRO \
@@ -935,11 +935,7 @@ int main(int argc,char* args[])
 								if (state.fc>=0 && state.fc<=7)
 									printf("%s", fcstyle[state.fc]);
 								else
-								{
-									char rgb[12];
-									make_rgb(state.fc,rgb);
-									printf("color: rgb(%s);",rgb);
-								}
+									print_color("color", state.fc);
 								break;
 							case MODE_24BIT:
 								printf("color: #%06x;",state.fc);
@@ -960,11 +956,7 @@ int main(int argc,char* args[])
 								if (state.bc>=0 && state.bc<=7)
 									printf("%s", bcstyle[state.bc]);
 								else
-								{
-									char rgb[12];
-									make_rgb(state.bc,rgb);
-									printf("background-color: rgb(%s);",rgb);
-								}
+									print_color("background-color", state.bc);
 								break;
 							case MODE_24BIT:
 								printf("background-color: #%06x;",state.bc);
